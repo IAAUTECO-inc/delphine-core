@@ -230,82 +230,90 @@ class OptionContract(admin.ModelAdmin):
 
     def create_quote(self, request, queryset):
         from koalixcrm.crm.views.newdocument import CreateNewDocumentView
-        for obj in queryset:
-            response = CreateNewDocumentView.create_new_document(self,
-                                                                 request,
-                                                                 obj,
-                                                                 koalixcrm.crm.documents.quote.Quote,
-                                                                 ("/admin/crm/"+obj.__class__.__name__.lower()+"/"))
-            return response
-
+        import koalixcrm.crm.documents.quote
+        if queryset.count() == 1:
+            return CreateNewDocumentView.create_new_document(self, request, queryset[0], koalixcrm.crm.documents.quote.Quote, ("/admin/crm/contract/"))
+        else:
+            success_count = 0
+            for contract in queryset:
+                new_doc = CreateNewDocumentView.create_new_document(self, request, contract, koalixcrm.crm.documents.quote.Quote, "", no_redirect=True)
+                if new_doc:
+                    success_count += 1
+            self.message_user(request, _(f"{success_count} quotes created"))
     create_quote.short_description = _("Create Quote")
 
     def create_invoice(self, request, queryset):
         from koalixcrm.crm.views.newdocument import CreateNewDocumentView
-        for obj in queryset:
-            response = CreateNewDocumentView.create_new_document(self,
-                                                                 request,
-                                                                 obj,
-                                                                 koalixcrm.crm.documents.invoice.Invoice,
-                                                                 ("/admin/crm/"+obj.__class__.__name__.lower()+"/"))
-            return response
-
+        import koalixcrm.crm.documents.invoice
+        if queryset.count() == 1:
+            return CreateNewDocumentView.create_new_document(self, request, queryset[0], koalixcrm.crm.documents.invoice.Invoice, ("/admin/crm/contract/"))
+        else:
+            success_count = 0
+            for contract in queryset:
+                new_doc = CreateNewDocumentView.create_new_document(self, request, contract, koalixcrm.crm.documents.invoice.Invoice, "", no_redirect=True)
+                if new_doc:
+                    success_count += 1
+            self.message_user(request, _(f"{success_count} invoices created"))
     create_invoice.short_description = _("Create Invoice")
 
     def create_purchase_confirmation(self, request, queryset):
         from koalixcrm.crm.views.newdocument import CreateNewDocumentView
-        for obj in queryset:
-            response = CreateNewDocumentView.create_new_document(self,
-                                                                 request,
-                                                                 obj,
-                                                                 koalixcrm.crm.documents.purchase_confirmation.PurchaseConfirmation,
-                                                                 ("/admin/crm/"+obj.__class__.__name__.lower()+"/"))
-            return response
-
+        import koalixcrm.crm.documents.purchase_confirmation
+        if queryset.count() == 1:
+            return CreateNewDocumentView.create_new_document(self, request, queryset[0], koalixcrm.crm.documents.purchase_confirmation.PurchaseConfirmation, ("/admin/crm/contract/"))
+        else:
+            success_count = 0
+            for contract in queryset:
+                new_doc = CreateNewDocumentView.create_new_document(self, request, contract, koalixcrm.crm.documents.purchase_confirmation.PurchaseConfirmation, "", no_redirect=True)
+                if new_doc:
+                    success_count += 1
+            self.message_user(request, _(f"{success_count} purchase confirmations created"))
     create_purchase_confirmation.short_description = _("Create Purchase Confirmation")
 
     def create_delivery_note(self, request, queryset):
         from koalixcrm.crm.views.newdocument import CreateNewDocumentView
-        for obj in queryset:
-            response = CreateNewDocumentView.create_new_document(self,
-                                                                 request,
-                                                                 obj,
-                                                                 koalixcrm.crm.documents.delivery_note.DeliveryNote,
-                                                                 ("/admin/crm/"+obj.__class__.__name__.lower()+"/"))
-            return response
-
+        import koalixcrm.crm.documents.delivery_note
+        if queryset.count() == 1:
+            return CreateNewDocumentView.create_new_document(self, request, queryset[0], koalixcrm.crm.documents.delivery_note.DeliveryNote, ("/admin/crm/contract/"))
+        else:
+            success_count = 0
+            for contract in queryset:
+                new_doc = CreateNewDocumentView.create_new_document(self, request, contract, koalixcrm.crm.documents.delivery_note.DeliveryNote, "", no_redirect=True)
+                if new_doc:
+                    success_count += 1
+            self.message_user(request, _(f"{success_count} delivery notes created"))
     create_delivery_note.short_description = _("Create Delivery note")
 
     def create_payment_reminder(self, request, queryset):
         from koalixcrm.crm.views.newdocument import CreateNewDocumentView
-        for obj in queryset:
-            response = CreateNewDocumentView.create_new_document(self,
-                                                                 request,
-                                                                 obj,
-                                                                 koalixcrm.crm.documents.payment_reminder.PaymentReminder,
-                                                                 ("/admin/crm/"+obj.__class__.__name__.lower()+"/"))
-            return response
-
+        import koalixcrm.crm.documents.payment_reminder
+        if queryset.count() == 1:
+            return CreateNewDocumentView.create_new_document(self, request, queryset[0], koalixcrm.crm.documents.payment_reminder.PaymentReminder, ("/admin/crm/contract/"))
+        else:
+            success_count = 0
+            for contract in queryset:
+                new_doc = CreateNewDocumentView.create_new_document(self, request, contract, koalixcrm.crm.documents.payment_reminder.PaymentReminder, "", no_redirect=True)
+                if new_doc:
+                    success_count += 1
+            self.message_user(request, _(f"{success_count} payment reminders created"))
     create_payment_reminder.short_description = _("Create Payment Reminder")
 
     def create_purchase_order(self, request, queryset):
         from koalixcrm.crm.views.newdocument import CreateNewDocumentView
-        for obj in queryset:
-            response = CreateNewDocumentView.create_new_document(self,
-                                                                 request,
-                                                                 obj,
-                                                                 koalixcrm.crm.documents.purchase_order.PurchaseOrder,
-                                                                 ("/admin/crm/"+obj.__class__.__name__.lower()+"/"))
-            return response
-
+        import koalixcrm.crm.documents.purchase_order
+        if queryset.count() == 1:
+            return CreateNewDocumentView.create_new_document(self, request, queryset[0], koalixcrm.crm.documents.purchase_order.PurchaseOrder, ("/admin/crm/contract/"))
+        else:
+            success_count = 0
+            for contract in queryset:
+                new_doc = CreateNewDocumentView.create_new_document(self, request, contract, koalixcrm.crm.documents.purchase_order.PurchaseOrder, "", no_redirect=True)
+                if new_doc:
+                    success_count += 1
+            self.message_user(request, _(f"{success_count} purchase orders created"))
     create_purchase_order.short_description = _("Create Purchase Order")
 
     def save_model(self, request, obj, form, change):
-        if change:
-            obj.last_modified_by = request.user
-        else:
-            obj.last_modified_by = request.user
-            obj.staff = request.user
+        obj.last_modified_by = request.user
         obj.save()
 
     actions = ['create_quote',

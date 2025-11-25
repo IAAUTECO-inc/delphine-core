@@ -7,7 +7,7 @@ from koalixcrm.crm.exceptions import *
 
 
 class CreateNewDocumentView:
-    def create_new_document(calling_model_admin, request, calling_model, requested_document_type, redirect_to):
+    def create_new_document(calling_model_admin, request, calling_model, requested_document_type, redirect_to, no_redirect=False):
         """This method exports PDFs provided by different Models in the crm application
 
             Args:
@@ -16,6 +16,7 @@ class CreateNewDocumentView:
               calling_model (Contract or SalesDocument):  The model from which a new document shall be created
               requested_document_type (str): The document type name that shall be created
               redirect_to (str): String that describes to where the method should redirect in case of an error
+              no_redirect (bool): If True, the method returns the document object or None, instead of redirecting.
 
             Returns:
               HTTpResponse with a PDF when successful
@@ -29,6 +30,8 @@ class CreateNewDocumentView:
             new_document.create_from_reference(calling_model)
             calling_model_admin.message_user(request, _(str(new_document) +
                                                         " created"))
+            if no_redirect:
+                return new_document
             response = HttpResponseRedirect('/admin/crm/'+
                                             new_document.__class__.__name__.lower()+
                                             '/'+
@@ -39,11 +42,15 @@ class CreateNewDocumentView:
             else:
                 contract = calling_model.contract
             if isinstance(e, TemplateSetMissingInContract):
+                if no_redirect:
+                    return None
                 response = HttpResponseRedirect('/admin/crm/contract/'+
                                                 str(contract.id))
                 calling_model_admin.message_user(request, _("Missing Templateset "),
                                                  level=messages.ERROR)
             elif isinstance(e, TemplateMissingInTemplateSet):
+                if no_redirect:
+                    return None
                 response = HttpResponseRedirect('/admin/djangoUserExtension/templateset/' +
                                                 str(contract.default_template_set.id))
                 calling_model_admin.message_user(request,

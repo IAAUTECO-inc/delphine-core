@@ -2,11 +2,13 @@
 
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
-from rest_framework.decorators import authentication_classes
+from rest_framework.decorators import authentication_classes, action
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
+from rest_framework.response import Response
 from rest_framework_xml.renderers import XMLRenderer
+from django.contrib.auth.models import User
 
 from koalixcrm.crm.contact.contact import PostalAddressForContact, EmailAddressForContact, PhoneAddressForContact
 from koalixcrm.crm.contact.customer import Customer
@@ -122,6 +124,41 @@ class CustomerAsJSON(viewsets.ModelViewSet):
     @permission_classes((IsAuthenticated,))
     def dispatch(self, *args, **kwargs):
         return super(CustomerAsJSON, self).dispatch(*args, **kwargs)
+
+    def get_koalixcrm_user(self, request):
+        koalixcrm_user = request.META.get('HTTP_KOALIXCRM_USER')
+        try:
+            user = User.objects.get(username=koalixcrm_user)
+            return user
+        except User.DoesNotExist:
+            return None
+
+    @action(detail=True, methods=['post'])
+    def create_contract(self, request, pk=None):
+        customer = self.get_object()
+        user = self.get_koalixcrm_user(request)
+        if not user:
+            return Response({'status': 'error', 'message': 'user not found'}, status=404)
+        contract = customer.create_contract(user)
+        return Response({'status': 'contract created', 'contract_id': contract.id})
+
+    @action(detail=True, methods=['post'])
+    def create_invoice(self, request, pk=None):
+        customer = self.get_object()
+        user = self.get_koalixcrm_user(request)
+        if not user:
+            return Response({'status': 'error', 'message': 'user not found'}, status=404)
+        invoice = customer.create_invoice(user)
+        return Response({'status': 'invoice created', 'invoice_id': invoice.id})
+
+    @action(detail=True, methods=['post'])
+    def create_quote(self, request, pk=None):
+        customer = self.get_object()
+        user = self.get_koalixcrm_user(request)
+        if not user:
+            return Response({'status': 'error', 'message': 'user not found'}, status=404)
+        quote = customer.create_quote(user)
+        return Response({'status': 'quote created', 'quote_id': quote.id})
 
 
 class CustomerGroupAsJSON(viewsets.ModelViewSet):

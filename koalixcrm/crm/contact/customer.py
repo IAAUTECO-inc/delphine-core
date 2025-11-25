@@ -8,7 +8,10 @@ from koalixcrm.plugin import *
 from koalixcrm.crm.contact.contact import Contact, ContactCall, ContactVisit,\
     PeopleInlineAdmin, PostalAddressForContact, ContactPostalAddress, \
     ContactPhoneAddress, ContactEmailAddress, CityFilter, StateFilter
+from django.contrib.auth.models import User
 from koalixcrm.crm.documents.contract import Contract
+from koalixcrm.crm.documents.invoice import Invoice
+from koalixcrm.crm.documents.quote import Quote
 
 
 class Customer(Contact):
@@ -20,18 +23,18 @@ class Customer(Contact):
                                           blank=True)
     is_lead = models.BooleanField(default=True)
 
-    def create_contract(self, request):
+    def create_contract(self, user: 'User') -> 'Contract':
         contract = Contract()
-        contract.create_from_reference(self, request.user)
+        contract.create_from_reference(self, user)
         return contract
 
-    def create_invoice(self, request):
-        contract = self.create_contract(request)
+    def create_invoice(self, user: 'User') -> 'Invoice':
+        contract = self.create_contract(user)
         invoice = contract.create_invoice()
         return invoice
 
-    def create_quote(self, request):
-        contract = self.create_contract(request)
+    def create_quote(self, user: 'User') -> 'Quote':
+        contract = self.create_contract(user)
         quote = contract.create_quote()
         return quote
 
@@ -116,37 +119,40 @@ class OptionCustomer(admin.ModelAdmin):
     get_is_lead.short_description = _("Is Lead")
 
     def create_contract(self, request, queryset):
-        for obj in queryset:
-            contract = obj.create_contract(request)
-            response = HttpResponseRedirect('/admin/crm/contract/' + str(contract.id))
-            return response
+        if queryset.count() == 1:
+            contract = queryset[0].create_contract(request.user)
+            return HttpResponseRedirect('/admin/crm/contract/' + str(contract.id))
+        else:
+            for obj in queryset:
+                obj.create_contract(request.user)
+            self.message_user(request, _("%s contracts created" % queryset.count()))
 
     create_contract.short_description = _("Create Contract")
 
-    @staticmethod
     def create_quote(self, request, queryset):
-        for obj in queryset:
-            quote = obj.create_quote(request)
-            response = HttpResponseRedirect('/admin/crm/quote/' + str(quote.id))
-        return response
+        if queryset.count() == 1:
+            quote = queryset[0].create_quote(request.user)
+            return HttpResponseRedirect('/admin/crm/quote/' + str(quote.id))
+        else:
+            for obj in queryset:
+                obj.create_quote(request.user)
+            self.message_user(request, _("%s quotes created" % queryset.count()))
 
     create_quote.short_description = _("Create Quote")
 
-    @staticmethod
     def create_invoice(self, request, queryset):
-        for obj in queryset:
-            invoice = obj.create_invoice(request)
-            response = HttpResponseRedirect('/admin/crm/invoice/' + str(invoice.id))
-        return response
+        if queryset.count() == 1:
+            invoice = queryset[0].create_invoice(request.user)
+            return HttpResponseRedirect('/admin/crm/invoice/' + str(invoice.id))
+        else:
+            for obj in queryset:
+                obj.create_invoice(request.user)
+            self.message_user(request, _("%s invoices created" % queryset.count()))
 
     create_invoice.short_description = _("Create Invoice")
 
     def save_model(self, request, obj, form, change):
-        if change:
-            obj.last_modified_by = request.user
-        else:
-            obj.last_modified_by = request.user
-            obj.staff = request.user
+        obj.last_modified_by = request.user
         obj.save()
 
     actions = ['create_contract', 'create_invoice', 'create_quote']
