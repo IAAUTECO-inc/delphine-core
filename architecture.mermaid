@@ -1,0 +1,49 @@
+classDiagram
+    class MainWindow {
+        +init_ui()
+        +show_contacts()
+        +show_documents()
+    }
+
+    class DatabaseManager {
+        +connect()
+        +get_session()
+    }
+
+    class Contact {
+        +int id
+        +String name
+        +String email
+        +String phone
+    }
+
+    class PostalAddress {
+        +int id
+        +String street
+        +String zip_code
+        +String city
+        +String country
+    }
+
+    class SalesDocument {
+        +int id
+        +String description
+        +Date date
+        +Decimal total
+    }
+
+    class Quote {
+        +Date valid_until
+    }
+
+    class Invoice {
+        +Date payable_until
+    }
+
+    MainWindow --> DatabaseManager : uses
+    MainWindow --> Contact : displays
+    MainWindow --> SalesDocument : displays
+    Contact "1" -- "0..*" PostalAddress : has
+    SalesDocument <|-- Quote : inherits
+    SalesDocument <|-- Invoice : inherits
+    SalesDocument "1" -- "1" Contact : belongs to
