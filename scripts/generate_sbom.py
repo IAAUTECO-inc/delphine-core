@@ -80,7 +80,7 @@ def generate_cyclonedx_sbom(dependencies):
     return sbom
 
 if __name__ == "__main__":
-    requirements_file = os.path.join(os.path.dirname(__file__), '../requirements.txt')
+    requirements_file = os.path.join(os.path.dirname(__file__), '../requirements/production_requirements.txt')
     # Resolve absolute path
     requirements_file = os.path.abspath(requirements_file)
     
