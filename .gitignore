@@ -27,3 +27,15 @@ pip-log.txt
 
 #VSCODE
 .vscode
+
+# Firebase credentials (NEVER commit these!)
+firebase-credentials.json
+
+# Security and log files
+security.log
+*.log
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3

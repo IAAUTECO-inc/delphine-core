@@ -14,9 +14,10 @@ if not SECRET_KEY:
 # 2. Debug Mode
 DEBUG = os.environ.get('KOALIXCRM_DEBUG', 'False') == 'True'
 
-# 3. Database Configuration
-DB_URL = os.environ.get('KOALIXCRM_DB_URL', 'sqlite:///koalixcrm.db')
-DB_SSL_MODE = os.environ.get('KOALIXCRM_DB_SSL_MODE', 'require')
+# 3. Firebase Configuration
+FIREBASE_CREDENTIALS_PATH = os.environ.get('FIREBASE_CREDENTIALS_PATH', 'firebase-credentials.json')
+FIREBASE_DATABASE_URL = os.environ.get('FIREBASE_DATABASE_URL')  # Optional for Realtime Database
+# For Firestore, credentials file is sufficient
 
 # 4. Logging and Auditing
 LOG_LEVEL = logging.INFO if not DEBUG else logging.DEBUG

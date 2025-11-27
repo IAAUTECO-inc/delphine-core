@@ -7,4 +7,6 @@ services:
       - "8000:8000"
     volumes:
       - .:/usr/src/app
-      - ./data:/usr/src/app/data
+    environment:
+      - FIREBASE_CREDENTIALS_PATH=/usr/src/app/firebase-credentials.json
+      - KOALIXCRM_DEBUG=True
