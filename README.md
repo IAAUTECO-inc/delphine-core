@@ -1,16 +1,13 @@
-# KoalixCRM - Desktop Edition
+# KoalixCRM
 
 ## Overview
-KoalixCRM is being reimagined as a high-performance desktop application for small business management.
-**Note**: This project is currently migrating from a Django-based web application to a standalone desktop application using **Qt (PySide6)** and **PostgreSQL**.
+KoalixCRM is a Django-based web application for small business management.
 
 ## Architecture
-- **User Interface**: PySide6 (Qt for Python)
+- **Framework**: Django
 - **Database**: PostgreSQL
-- **ORM**: SQLAlchemy
-- **Architecture Diagram**: See [architecture.mermaid](architecture.mermaid)
 
-## Features (Planned)
+## Features
 - Manage Contacts, Customers, Suppliers
 - Create and Manage Quotes, Invoices, Purchase Orders
 - Product and Price Management
@@ -19,16 +16,44 @@ KoalixCRM is being reimagined as a high-performance desktop application for smal
 
 ## Installation (Development)
 1. Install Python 3.10+
-2. Install PostgreSQL
-3. Install dependencies:
+2. Install PostgreSQL and create a database for the project.
+3. Configure the database connection in `projectsettings/settings.py`.
+4. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-4. Run the application:
+5. Run the database migrations:
+    ```bash
+    python manage.py migrate
+    ```
+6. Run the development server:
    ```bash
-   python main.py
+   python manage.py runserver
    ```
 
 ## Documentation
-Legacy documentation for the Django version can be found [here](http://readthedocs.org/docs/koalixcrm/en/master/).
-New documentation will be added as the migration progresses.
+The documentation for the project can be found [here](http://readthedocs.org/docs/koalixcrm/en/master/).
+
+## FreeBSD Service
+To run KoalixCRM as a service on FreeBSD, you can use the provided rc.d script template.
+
+1. Copy the script template to the rc.d directory:
+    ```bash
+    cp scripts/koalixcrm.in /usr/local/etc/rc.d/koalixcrm
+    ```
+2. Make the script executable:
+    ```bash
+    chmod +x /usr/local/etc/rc.d/koalixcrm
+    ```
+3. Edit the script to set the correct values for the following variables:
+    - `koalixcrm_user`
+    - `koalixcrm_group`
+    - `koalixcrm_dir`
+4. Enable the service in `/etc/rc.conf`:
+    ```bash
+    echo 'koalixcrm_enable="YES"' >> /etc/rc.conf
+    ```
+5. Start the service:
+    ```bash
+    service koalixcrm start
+    ```

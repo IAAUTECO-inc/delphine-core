@@ -1,0 +1,68 @@
+#!/bin/sh
+#
+# PROVIDE: koalixcrm
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+#
+# Add the following lines to /etc/rc.conf to enable this service:
+#
+# koalixcrm_enable="YES"
+# koalixcrm_user="www"
+# koalixcrm_group="www"
+# koalixcrm_dir="/usr/local/www/koalixcrm"
+#
+
+. /etc/rc.subr
+
+name="koalixcrm"
+rcvar="koalixcrm_enable"
+
+load_rc_config $name
+
+: ${koalixcrm_enable:="NO"}
+: ${koalixcrm_user:="www"}
+: ${koalixcrm_group:="www"}
+: ${koalixcrm_dir:="/usr/local/www/koalixcrm"}
+: ${koalixcrm_pidfile:="/var/run/${name}.pid"}
+
+koalixcrm_venv="${koalixcrm_dir}/venv"
+gunicorn_command="${koalixcrm_venv}/bin/gunicorn"
+command_interpreter="${koalixcrm_venv}/bin/python"
+
+procname="${gunicorn_command}"
+command="${gunicorn_command}"
+command_args="--workers 3 --bind 127.0.0.1:8000 --pid ${koalixcrm_pidfile} projectsettings.wsgi:application"
+
+start_cmd="${name}_start"
+stop_cmd="${name}_stop"
+restart_cmd="${name}_restart"
+
+koalixcrm_start()
+{
+    if [ ! -f "${koalixcrm_pidfile}" ]; then
+        echo "Starting ${name}."
+        /usr/sbin/daemon -u ${koalixcrm_user} -g ${koalixcrm_group} -f -p ${koalixcrm_pidfile} ${command} ${command_args}
+    else
+        echo "${name} is already running."
+    fi
+}
+
+koalixcrm_stop()
+{
+    if [ -f "${koalixcrm_pidfile}" ]; then
+        echo "Stopping ${name}."
+        kill `cat ${koalixcrm_pidfile}`
+        rm -f ${koalixcrm_pidfile}
+    else
+        echo "${name} is not running."
+    fi
+}
+
+koalixcrm_restart()
+{
+    ${name}_stop
+    sleep 1
+    ${name}_start
+}
+
+run_rc_command "$1"
