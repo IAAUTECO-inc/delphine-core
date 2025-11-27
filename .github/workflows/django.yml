@@ -15,6 +15,11 @@ jobs:
     
     - name: Build Docker Image
       run: docker-compose build web
+
+    - name: Scan for vulnerabilities
+      run: |
+        docker-compose run --rm web /bin/bash -c "pip install pip-audit && pip-audit -r requirements/production_requirements.txt"
+
       
     - name: Run Tests in Docker
       run: | 
