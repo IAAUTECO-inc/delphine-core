@@ -1,0 +1,41 @@
+{
+    "bomFormat": "CycloneDX",
+    "specVersion": "1.4",
+    "serialNumber": "urn:uuid:134b84e4-2dc8-43ef-8808-47f2cf35abe3",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2025-12-01T14:53:54.375521+00:00",
+        "tools": [
+            {
+                "vendor": "KoalixCRM",
+                "name": "SBOM Generator",
+                "version": "1.0"
+            }
+        ],
+        "component": {
+            "type": "application",
+            "name": "KoalixCRM",
+            "version": "1.0.0"
+        }
+    },
+    "components": [
+        {
+            "type": "library",
+            "name": "firebase-admin",
+            "version": "6.4.0",
+            "purl": "pkg:pypi/firebase-admin@6.4.0"
+        },
+        {
+            "type": "library",
+            "name": "PySide6",
+            "version": "6.6.1",
+            "purl": "pkg:pypi/PySide6@6.6.1"
+        },
+        {
+            "type": "library",
+            "name": "cryptography",
+            "version": "42.0.2",
+            "purl": "pkg:pypi/cryptography@42.0.2"
+        }
+    ]
+}

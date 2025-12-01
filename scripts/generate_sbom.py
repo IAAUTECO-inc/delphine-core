@@ -1,6 +1,6 @@
 import json
 import uuid
-from datetime import datetime
+from datetime import datetime, UTC
 import os
 
 def parse_requirements(file_path):
@@ -51,7 +51,7 @@ def generate_cyclonedx_sbom(dependencies):
         "serialNumber": f"urn:uuid:{uuid.uuid4()}",
         "version": 1,
         "metadata": {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(UTC).isoformat(),
             "tools": [
                 {
                     "vendor": "KoalixCRM",
