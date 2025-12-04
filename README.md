@@ -1,19 +1,22 @@
 # KoalixCRM
 
 ## Overview
-KoalixCRM is a Django-based web application for small business management.
+## DELPHINE ## is the database and critical data management system (CRM) at the core of the Winterhold ecosystem. It is the most ethical, secure, and auditable solution for any organization handling sensitive records (social assistance, health, or personal information).
+
+Our mission is to guarantee that critical data remains sovereign and serves only one purpose: the autonomy and integrity of the end-user.
 
 ## Architecture
-- **Framework**: Django
+
 - **Database**: PostgreSQL
 
 ## Features
-- Manage Contacts, Customers, Suppliers
-- Create and Manage Quotes, Invoices, Purchase Orders
-- Product and Price Management
-- PDF Document Generation
-- Double Entry Accounting
+## DELPHINE ## is optimized to securely and efficiently feed complex AI models across the Winterhold architecture (Skald, DAWNSTAR, ESBERN).
 
+Polyglot Storage: We utilize polyglot database systems (SQL, NoSQL, Graph) to optimize information extraction and specialized querying by AI models.
+Native Deep Learning Integration: DELPHINE is structured for efficient access by models:
+PyTorch / Keras: Used for needs segmentation and predictive risk analysis based on assistance profiles.
+Scikit-learn: Used for lightweight classification and detecting anomalies in data entries.
+Secure Extraction API (for MASAQ): A specially designed API ensures that the MASAQ engine can extract the necessary data for the Skald Agent's inference without compromising the integrity of the entire dataset.
 ## Installation (Development)
 1. Install Python 3.10+
 2. Install PostgreSQL and create a database for the project.
