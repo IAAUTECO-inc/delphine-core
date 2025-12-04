@@ -1,49 +1,42 @@
 classDiagram
-    class MainWindow {
-        +init_ui()
-        +show_contacts()
-        +show_documents()
+    class BackgroundService {
+        +main()
     }
 
-    class DatabaseManager {
-        +connect()
-        +get_session()
+    class UserExtension {
+        +User user
+        +TemplateSet default_template_set
+        +Currency default_currency
     }
 
-    class Contact {
-        +int id
+    class DocumentTemplate {
+        +String title
+        +String template_type
+    }
+
+    class TemplateSet {
         +String name
-        +String email
-        +String phone
     }
 
-    class PostalAddress {
-        +int id
-        +String street
-        +String zip_code
-        +String city
-        +String country
+    class Inference {
+        +load_model()
+        +make_prediction()
     }
 
-    class SalesDocument {
-        +int id
-        +String description
-        +Date date
-        +Decimal total
+    class DummyModel {
+        +predict()
     }
 
-    class Quote {
-        +Date valid_until
-    }
+    class PostalAddress
+    class PhoneAddress
+    class EmailAddress
+    class Currency
 
-    class Invoice {
-        +Date payable_until
-    }
-
-    MainWindow --> DatabaseManager : uses
-    MainWindow --> Contact : displays
-    MainWindow --> SalesDocument : displays
-    Contact "1" -- "0..*" PostalAddress : has
-    SalesDocument <|-- Quote : inherits
-    SalesDocument <|-- Invoice : inherits
-    SalesDocument "1" -- "1" Contact : belongs to
+    BackgroundService --|> UserExtension : uses
+    BackgroundService --|> Inference : uses
+    UserExtension "1" -- "1" TemplateSet : has
+    UserExtension "1" -- "1" Currency : has
+    Inference --|> DummyModel : uses
+    UserExtension "1" -- "0..*" PostalAddress : has
+    UserExtension "1" -- "0..*" PhoneAddress : has
+    UserExtension "1" -- "0..*" EmailAddress : has

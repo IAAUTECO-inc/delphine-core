@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# PROVIDE: koalixcrm
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+# Add the following lines to /etc/rc.conf to enable this service:
+#
+# koalixcrm_enable="YES"
+#
+
+. /etc/rc.subr
+
+name="koalixcrm"
+rcvar="koalixcrm_enable"
+
+#
+# CHANGE THE FOLLOWING VARIABLES TO MATCH YOUR SETUP
+#
+koalixcrm_dir="/usr/local/share/koalixcrm"
+python_cmd="/usr/local/bin/python"
+koalixcrm_script="${koalixcrm_dir}/koalixcrm/background_service.py"
+pidfile="/var/run/${name}.pid"
+
+command="/usr/sbin/daemon"
+command_args="-p ${pidfile} -f ${python_cmd} ${koalixcrm_script}"
+
+load_rc_config $name
+
+run_rc_command "$1"

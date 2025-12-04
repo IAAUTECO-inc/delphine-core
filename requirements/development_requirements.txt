@@ -1,5 +1,4 @@
 firebase-admin==6.4.0
-PySide6==6.6.1
 cryptography==42.0.2
 # Testing & Tools
 pytest>=8.0.0

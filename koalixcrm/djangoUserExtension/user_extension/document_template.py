@@ -8,15 +8,40 @@ from filebrowser.fields import FileBrowseField
 
 from koalixcrm.djangoUserExtension.user_extension.text_paragraph import InlineTextParagraph
 from koalixcrm.global_support_functions import xstr
-from koalixcrm.crm.exceptions import *
+from koalixcrm.djangoUserExtension.exceptions import TemplateFOPConfigFileMissing, TemplateXSLTFileMissing
 
 
 class DocumentTemplate(models.Model):
+    INVOICE = "INV"
+    QUOTE = "QUO"
+    DELIVERY_NOTE = "DLN"
+    PAYMENT_REMINDER = "PRM"
+    PURCHASE_ORDER = "PUO"
+    PURCHASE_CONFIRMATION = "PUC"
+    PROFIT_LOSS_STATEMENT = "PLS"
+    BALANCE_SHEET = "BSH"
+    MONTHLY_PROJECT_SUMMARY = "MPS"
+    WORK_REPORT = "WRP"
+
+    TEMPLATE_TYPES = (
+        (INVOICE, _("Invoice")),
+        (QUOTE, _("Quote")),
+        (DELIVERY_NOTE, _("Delivery Note")),
+        (PAYMENT_REMINDER, _("Payment Reminder")),
+        (PURCHASE_ORDER, _("Purchase Order")),
+        (PURCHASE_CONFIRMATION, _("Purchase Confirmation")),
+        (PROFIT_LOSS_STATEMENT, _("Profit Loss Statement")),
+        (BALANCE_SHEET, _("Balance Sheet")),
+        (MONTHLY_PROJECT_SUMMARY, _("Monthly Project Summary")),
+        (WORK_REPORT, _("Work Report")),
+    )
+
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(verbose_name=_("Title"),
                              max_length=100,
                              blank=True,
                              null=True)
+    template_type = models.CharField(max_length=3, choices=TEMPLATE_TYPES, verbose_name=_("Template Type"))
     xsl_file = FileBrowseField(verbose_name=_("XSL File"),
                                max_length=200)
     fop_config_file = FileBrowseField(verbose_name=_("FOP Configuration File"),
@@ -49,88 +74,5 @@ class DocumentTemplate(models.Model):
         return xstr(self.id) + ' ' + xstr(self.title.__str__())
 
 
-class InvoiceTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Invoice template')
-        verbose_name_plural = _('Invoice templates')
 
-
-class QuoteTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Quote template')
-        verbose_name_plural = _('Quote templates')
-
-
-class DeliveryNoteTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Delivery note template')
-        verbose_name_plural = _('Delivery note templates')
-
-
-class PaymentReminderTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Payment reminder template')
-        verbose_name_plural = _('Payment reminder templates')
-
-
-class PurchaseOrderTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Purchase order template')
-        verbose_name_plural = _('Purchase order templates')
-
-
-class PurchaseConfirmationTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Purchase confirmation template')
-        verbose_name_plural = _('Purchase confirmation templates')
-
-
-class ProfitLossStatementTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Profit loss statement template')
-        verbose_name_plural = _('Profit loss statement templates')
-
-
-class BalanceSheetTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Balance sheet template')
-        verbose_name_plural = _('Balance sheet templates')
-
-
-class MonthlyProjectSummaryTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Monthly project summary template')
-        verbose_name_plural = _('Monthly project summary templates')
-
-
-class WorkReportTemplate(DocumentTemplate):
-    class Meta:
-        app_label = "djangoUserExtension"
-        verbose_name = _('Work report template')
-        verbose_name_plural = _('Work report templates')
-
-
-class OptionDocumentTemplate(admin.ModelAdmin):
-    list_display = ('id', 'title')
-    list_display_links = ('id', 'title')
-    ordering = ('id',)
-    search_fields = ('id', 'title')
-    fieldsets = (
-        (_('Basics'), {
-            'fields': ('title',
-                       'xsl_file',
-                       'fop_config_file',
-                       'logo')
-        }),
-    )
-    inlines = [InlineTextParagraph]
 
